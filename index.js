@@ -1,108 +1,97 @@
-//implement 2 state - multiple reducers
+//async actions implementation (API Calls)
+const redux = require("redux");
+const axios = require("axios").default;
+//middlewares
+const applyMiddleware = redux.applyMiddleware;
+const thunkMiddleWare = require("redux-thunk").default;
 
-const createStore = require("redux").createStore;
-const combineReducers = require("redux").combineReducers;
-// action JS Object
-const BUY_CAKE = "BUY_CAKE";
+//create redux store function
+const createStore = redux.createStore;
 
-//action creater --> is a JS Function returns an action
-const buyCakeActionCreater = () => {
+//initial State
+const initState = {
+  loading: false,
+  users: [],
+  error: "",
+};
+
+//actions
+const FETCH_USERS_REQUEST = "FETCH_USERS_REQUEST";
+const FETCH_USERS_SUCCESS = "FETCH_USERS_SUCCESS";
+const FETCH_USERS_FAILURE = "FETCH_USERS_FAILURE";
+
+//action creaters
+const fetchUsersRequest = () => {
   return {
-    type: BUY_CAKE,
-    info: "Buy one cake",
+    type: FETCH_USERS_REQUEST,
   };
 };
 
-const BUY_ICECREAM = "BUY_ICECREAM";
-
-const buyIceCreameActionCreater = () => {
+//in case of fetching data
+const fetchUsersSuccess = (users) => {
   return {
-    type: BUY_ICECREAM,
-    info: "Buy one ice cream",
+    type: FETCH_USERS_SUCCESS,
+    payload: users,
   };
 };
 
-//initial state =-> JS Object
-// const initState = {
-//   noOfCake: 20,
-// };
-
-const initCakeState = {
-  noOfCake: 10,
+//in case of failure in fetching data
+const fetchUsersFailure = (error) => {
+  return {
+    type: FETCH_USERS_FAILURE,
+    payload: error,
+  };
 };
 
-const initIceCreamState = {
-  noOfIceCream: 10,
-};
-
-//reducer --> JS Function accepts prevState, action as arguments
-//returns the new state
-// const reducer = (state = initState, action) => {
-//   switch (action.type) {
-//     case "BUY_CAKE":
-//       return {
-//         ...state,
-//         noOfCake: state.noOfCake - 1,
-//       };
-//     default:
-//       return state;
-//   }
-// };
-
-//multiple reducers
-//1- cake reducer
-const cakeReducer = (state = initCakeState, action) => {
+//reducer
+const reducer = (state = initState, action) => {
   switch (action.type) {
-    case "BUY_CAKE":
+    case FETCH_USERS_REQUEST:
       return {
         ...state,
-        noOfCake: state.noOfCake - 1,
+        loading: true,
+      };
+    case FETCH_USERS_SUCCESS:
+      return {
+        loading: false,
+        users: action.payload,
+        error: "",
+      };
+    case FETCH_USERS_FAILURE:
+      return {
+        loading: false,
+        users: [],
+        error: action.payload,
       };
     default:
       return state;
   }
 };
 
-//2- ice cream reducer
-const iceCreamReducer = (state = initIceCreamState, action) => {
-  switch (action.type) {
-    case BUY_ICECREAM:
-      return {
-        ...state,
-        noOfIceCream: state.noOfIceCream - 1,
-      };
-    default:
-      return state;
-  }
+// async action creator --> return a function
+const fetchUsers = () => {
+  return function (dispatch) {
+    //make a dispatch fetchUserRequest
+    dispatch(fetchUsersRequest());
+    axios
+      .get("https://jsonplaceholder.typicode.com/users")
+      .then((res) => {
+        // data -> res.data
+        //make another dispatch fetchUserSuccess
+        const users = res.data.map((user) => user.id);
+        dispatch(fetchUsersSuccess(users));
+      })
+      .catch((err) => {
+        //make final dispatch fetchUSersFailure
+        dispatch(fetchUsersFailure(err.message));
+      });
+  };
 };
 
-//combine reducers in root reducer
-const rootReducer = combineReducers({
-  //cake here is the name of global state object
-  cake: cakeReducer,
-  //iceCream here is the name of global state object
-  iceCream: iceCreamReducer,
-});
-//create store
-const store = createStore(rootReducer);
+//create a store
+const store = createStore(reducer, applyMiddleware(thunkMiddleWare));
+console.log("Init State", store.getState());
+store.subscribe(() => console.log("Updated State", store.getState()));
 
-// get the state
-console.log(store.getState());
-
-//get the updated state
-const unsubscribe = store.subscribe(() => {
-  console.log("updated state", store.getState());
-  //to access cake state only
-  console.log("cake state", store.getState().cake);
-});
-
-//make an update to state
-//invoke the action creater
-store.dispatch(buyCakeActionCreater());
-//or invoke direct action
-store.dispatch(buyCakeActionCreater());
-store.dispatch(buyIceCreameActionCreater());
-store.dispatch(buyIceCreameActionCreater());
-
-//to handle unsubscribe and prevent subscribe function to fire
-unsubscribe();
+//make dispatch for the async action creator
+store.dispatch(fetchUsers());
