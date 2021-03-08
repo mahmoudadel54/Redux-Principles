@@ -89,6 +89,7 @@ const fetchUsers = () => {
 };
 
 //create a store
+//if there is an API call --> thunkMiddleWare must be there
 const store = createStore(reducer, applyMiddleware(thunkMiddleWare));
 console.log("Init State", store.getState());
 store.subscribe(() => console.log("Updated State", store.getState()));
