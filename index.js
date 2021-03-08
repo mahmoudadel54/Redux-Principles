@@ -78,7 +78,9 @@ const iceCreamReducer = (state = initIceCreamState, action) => {
 
 //combine reducers in root reducer
 const rootReducer = combineReducers({
+  //cake here is the name of global state object
   cake: cakeReducer,
+  //iceCream here is the name of global state object
   iceCream: iceCreamReducer,
 });
 //create store
@@ -88,9 +90,11 @@ const store = createStore(rootReducer);
 console.log(store.getState());
 
 //get the updated state
-const unsubscribe = store.subscribe(() =>
-  console.log("updated state", store.getState())
-);
+const unsubscribe = store.subscribe(() => {
+  console.log("updated state", store.getState());
+  //to access cake state only
+  console.log("cake state", store.getState().cake);
+});
 
 //make an update to state
 //invoke the action creater
