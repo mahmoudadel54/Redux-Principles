@@ -12,6 +12,9 @@ function NavBar() {
       <Link className="btn btn-success" to="/cakeshop">
         Cake Shop
       </Link>
+      <Link className="btn btn-danger" to="/users">
+        User List
+      </Link>
       <Link className="btn btn-primary" to="/icecreamshop">
         Ice Cream Shop
       </Link>

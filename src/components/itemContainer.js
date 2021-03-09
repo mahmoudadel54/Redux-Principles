@@ -38,5 +38,4 @@ export default connect(mapStateToProps, mapDispatchToProps)(ItemContainer);
 /*
 in case of wanting use dispatch only -- > put null as first parameter 
 export default connect(null, mapDispatchToProps)(ItemContainer);
-
 */
