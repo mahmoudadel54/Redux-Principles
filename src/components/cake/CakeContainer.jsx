@@ -14,7 +14,6 @@ import { backCake, buyCake } from "../../redux/cakes/actions/BuyCakeAction";
 
 const CakeContainer = (props) => {
   const { noOfCakes, buyCake, backCake } = props;
-  console.log(props);
 
   return (
     <>
@@ -26,6 +25,7 @@ const CakeContainer = (props) => {
             border: "solid",
             borderRadius: "2em",
             padding: "0 1em",
+            wordWrap: "break-word",
           }}
         >
           Using mapStateToProps, mapDispatchToProps with connect{" "}

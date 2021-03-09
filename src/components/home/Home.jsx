@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import ItemContainer from "../itemContainer";
 import "./style.css";
 
 function Home() {
@@ -15,6 +16,8 @@ function Home() {
             {" "}
             Click here to open ice cream shop{" "}
           </Link>
+          <ItemContainer cake />
+          <ItemContainer />
         </div>
       </div>
     </div>

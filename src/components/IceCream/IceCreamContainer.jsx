@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { connect } from "react-redux";
 import {
   buyIceCream,
@@ -6,8 +7,7 @@ import {
 
 const IceCreamContainer = (props) => {
   const { noOfIceCream, buyIceCream, backIceCream } = props;
-  console.log(props);
-
+  const [number, setNumber] = useState(1);
   return (
     <>
       <div className="container text-center mt-5">
@@ -18,6 +18,7 @@ const IceCreamContainer = (props) => {
             border: "solid",
             borderRadius: "2em",
             padding: "0 1em",
+            wordWrap: "break-word",
           }}
         >
           Using mapStateToProps, mapDispatchToProps with connect{" "}
@@ -26,7 +27,14 @@ const IceCreamContainer = (props) => {
         {noOfIceCream > 1 ? (
           <>
             <h4>No of available Ice Cream: {noOfIceCream}</h4>
-            <button onClick={buyIceCream}>Buy Ice Cream</button>
+            <input
+              type="text"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+            />
+            <button onClick={() => buyIceCream(number)}>
+              Buy {number} Ice Cream
+            </button>
             <button onClick={backIceCream}>Back IceCreamContainer</button>
           </>
         ) : (
@@ -48,8 +56,8 @@ const mapStateToProps = (state) => {
 //step no. 2
 const mapDispatchToProps = (dispatch) => {
   return {
-    buyIceCream: () => {
-      dispatch(buyIceCream());
+    buyIceCream: (number) => {
+      dispatch(buyIceCream(number));
     },
     backIceCream: () => {
       dispatch(backIceCream());
