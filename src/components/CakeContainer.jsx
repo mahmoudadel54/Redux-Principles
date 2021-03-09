@@ -15,13 +15,22 @@ import { backCake, buyCake } from "../redux/cakes/actions/BuyCakeAction";
 const CakeContainer = (props) => {
   const { noOfCakes, buyCake, backCake } = props;
   console.log(props);
+
   return (
     <>
-      <div>
+      <div className="container text-center mt-5">
         <h2>Cake Shop</h2>
-        <h4>No of available cakes: {noOfCakes}</h4>
-        <button onClick={buyCake}>Buy Cake</button>
-        <button onClick={backCake}>Back Cake</button>
+        {noOfCakes > 1 ? (
+          <>
+            <h4>No of available cakes: {noOfCakes}</h4>
+            <button onClick={buyCake}>Buy Cake</button>
+            <button onClick={backCake}>Back Cake</button>
+          </>
+        ) : (
+          <>
+            <h2>No cakes remaining. It is empty now</h2>
+          </>
+        )}
       </div>
     </>
   );
