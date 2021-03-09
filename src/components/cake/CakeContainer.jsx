@@ -10,7 +10,7 @@ and return the component after passing the required data and dispatchs to its pr
 */
 
 import { connect } from "react-redux";
-import { backCake, buyCake } from "../redux/cakes/actions/BuyCakeAction";
+import { backCake, buyCake } from "../../redux/cakes/actions/BuyCakeAction";
 
 const CakeContainer = (props) => {
   const { noOfCakes, buyCake, backCake } = props;
@@ -19,6 +19,18 @@ const CakeContainer = (props) => {
   return (
     <>
       <div className="container text-center mt-5">
+        <span
+          style={{
+            marginBottom: "2vh",
+            width: "fit-content",
+            border: "solid",
+            borderRadius: "2em",
+            padding: "0 1em",
+          }}
+        >
+          Using mapStateToProps, mapDispatchToProps with connect{" "}
+        </span>
+
         <h2>Cake Shop</h2>
         {noOfCakes > 1 ? (
           <>
@@ -39,7 +51,7 @@ const CakeContainer = (props) => {
 //step no. 1
 const mapStateToProps = (state) => {
   return {
-    noOfCakes: state.noOfCakes,
+    noOfCakes: state.cake.noOfCakes,
   };
 };
 //step no. 2

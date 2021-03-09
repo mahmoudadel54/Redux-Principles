@@ -5,15 +5,25 @@ use -> useDispatch
 */
 
 import { useSelector, useDispatch } from "react-redux";
-import { backCake, buyCake } from "../redux/cakes/actions/BuyCakeAction";
+import { backCake, buyCake } from "../../redux/cakes/actions/BuyCakeAction";
 
 function HooksCakeContainer() {
   // to hold state -> useSelector
-  const noOfCakes = useSelector((state) => state.noOfCakes);
+  const noOfCakes = useSelector((state) => state.cake.noOfCakes);
   // to hold dispatchs -> useDispatch
   const dispatch = useDispatch();
   return (
     <div className="container text-center mt-5">
+      <span
+        style={{
+          marginBottom: "2vh",
+          border: "solid",
+          borderRadius: "2em",
+          padding: "0 1em",
+        }}
+      >
+        Using Redux Hooks
+      </span>
       <h2>Cake Shop</h2>
       <h4>No of available cakes: {noOfCakes}</h4>
       <button onClick={() => dispatch(buyCake())}>Buy Cake</button>
